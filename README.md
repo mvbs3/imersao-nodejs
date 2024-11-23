@@ -58,3 +58,10 @@ app.get("/posts", async (req, res) => {
 })
 ```
 
+Agora é necessário criar uma modularização:
+Criar pastas para determinadas necesspidades do codigo:
+pasta 1 dentro de src: routes, nessa pasta é criado o arquivo postRoutes.js para colocar apenas as rotas do projeto
+pasta 2 dentro de src: controller, nessa pasta é criado a parte de lógica do projeto, para colcoar apenas a responsabildiade de lidar com reuqisicoes e repsostas
+pasta 3 dentro de src: models, colocar todas as funções auxiliares como conectar o banco, fazer requisicoes ao banco eetc
+
+Modelo routes, controlle models, perguntar a IA
