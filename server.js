@@ -1,35 +1,14 @@
 import express from "express"
+import conectarAoBanco from "./src/config/dbConfig.js"
+//console.log(process.env.STRING_CONEXAO)
+const conexao = await conectarAoBanco(process.env.STRING_CONEXAO)
 
-const posts = [
-    {
-        descricao: "Uma foto teste",
-        imagem: "https://placecats.com/millie/300/150"
-    },
-    {
-        descricao: "Gatinho fofo dormindo",
-        imagem: "https://placecats.com/200/300"
-    },
-    {
-        descricao: "Olhar penetrante",
-        imagem: "https://placecats.com/gray/400/200"
-    },
-    {
-        descricao: "Brincando com um novelo de lã",
-        imagem: "https://placecats.com/kitten/350/250"
-    },
-    {
-        descricao: "Gato curioso",
-        imagem: "https://placecats.com/orange/500/300"
-    },
-    {
-        descricao: "Miauuuu!",
-        imagem: "https://placecats.com/tabby/400/400"
-    },
-    {
-        descricao: "Gato preto, sorte preta!",
-        imagem: "https://placecats.com/black/300/300"
-    }
-];
+async function getTodosPosts(){
+    const db =  conexao.db("teste-node-backend") //nome banco
+    const colecao = db.collection("posts") // nome tabela
+    return colecao.find().toArray()
+}
+
 
 const app = express();
 app.use(express.json())
@@ -38,6 +17,19 @@ app.listen(3000, () => {
     console.log("Server started...");
 })
 
-app.get("/api",(req, res) => {
-    res.status(200).send("Hello World, meu app express!")
+app.get("/posts", async (req, res) => {
+    const posts = await getTodosPosts()
+    res.status(200).json(posts)
 })
+
+// function buscarPostPorID(id){
+//     return posts.findIndex((post)=> {
+//         return post.id === Number(id)
+
+//     })
+// }
+
+// app.get("/posts/:id",(req, res) => {
+//     const index = buscarPostPorID(req.params.id)
+//     res.status(200).json(posts[index])
+// })
