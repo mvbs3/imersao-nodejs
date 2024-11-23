@@ -70,3 +70,15 @@ Utilizar a extensão do vsCode que funciona como um postMan = ThunderClient
 
 Utilizar Multer ajuda a gerenciar arquivos + gerenciamento de pastas de um computador, ao enviar uma imagem pro back-end é precisdo armazenar essa imagem
                 npm install multer
+
+para utilizar o multer utilize 
+                const upload = multer({dest: "./uploads"})
+
+e para fazer upload do arquivo durante a requisição é necessário colocar antes de chamar a função do controller:
+
+```javascript
+    app.post("/upload", upload.single("imagem"),  )
+```
+
+no windowns é necessário fazer de outra forma q ta a aula.
+Pausei a aula no minuto 41
