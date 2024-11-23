@@ -81,4 +81,18 @@ e para fazer upload do arquivo durante a requisição é necessário colocar ant
 ```
 
 no windowns é necessário fazer de outra forma q ta a aula.
-Pausei a aula no minuto 41
+```javascript
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+})
+
+const upload = multer({ dest: "./uploads" , storage})
+```
+Caso esteja no windowns ele vai salvar com nomes aleatorios, e esse codigo ajuda a salvar o nome correto
+
+Para testar o multer no postman, é necessário enviar a imagem na parte do body "form-data", isso está na documentação do multer.

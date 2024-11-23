@@ -1,9 +1,19 @@
 import express from "express"
 import multer from "multer"
-import { listarPosts, postarNovoPost } from "../controllers/postController.js";
+import { listarPosts, postarNovoPost, uploadImagem } from "../controllers/postController.js";
 
 
-const upload = multer({dest: "./uploads"})
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+  })
+  
+const upload = multer({ dest: "./uploads" , storage})
+//const upload = multer({dest: "./uploads"})
 
 const routes  = (app) => {
     // Habilita o middleware para analisar corpos de requisições JSON.
