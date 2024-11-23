@@ -1,5 +1,5 @@
 import express from "express"
-import { listarPosts } from "../controllers/postController.js";
+import { listarPosts, postarNovoPost } from "../controllers/postController.js";
 
 
 
@@ -10,6 +10,7 @@ const routes  = (app) => {
     // Define uma rota GET para o endpoint /posts.
     // Quando uma requisição GET é feita para este endpoint, a função é executada.
     app.get("/posts", listarPosts);
+    app.post("/posts", postarNovoPost )
 }
 
 export default routes;

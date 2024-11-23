@@ -65,3 +65,8 @@ pasta 2 dentro de src: controller, nessa pasta é criado a parte de lógica do p
 pasta 3 dentro de src: models, colocar todas as funções auxiliares como conectar o banco, fazer requisicoes ao banco eetc
 
 Modelo routes, controlle models, perguntar a IA
+
+Utilizar a extensão do vsCode que funciona como um postMan = ThunderClient
+
+Utilizar Multer ajuda a gerenciar arquivos + gerenciamento de pastas de um computador, ao enviar uma imagem pro back-end é precisdo armazenar essa imagem
+                npm install multer
