@@ -1,126 +1,153 @@
-Para iniciar o proejto, é encessário utiliza o comando:
+## README - Projeto Node.js com MongoDB e Google Cloud Deploy
+#### Este é um guia detalhado para configurar e implementar um servidor Node.js 
+#### utilizando MongoDB, gerenciar arquivos com Multer, e fazer deploy na Google Cloud.
+#### O objetivo é criar um backend modularizado, eficiente e escalável.
 
-            npm init es6 -y
-Para utilizar o framework express:
+## =============================
+## Configuração Inicial
+## =============================
 
-            npm install express
-
-COdigo básico do servidor para inicializar um server:
-
+# 1. Iniciar o Projeto
+```shell
+npm init es6 -y
+```
+# 2. Instalar o Express
+```shell
+npm install express
+```
+# 3. Criar o Servidor Básico
+# Exemplo de código para inicializar um servidor:
 ```javascript
-import express from "express"
+import express from "express";
 
 const app = express();
 
 app.listen(3000, () => {
     console.log("Server started...");
-})
+});
 ```
 
-Rodar o server:
-        node server.js
-        ou
-        node --watch server.js
-        //esse watch consegue atualziar o servidor instantaneamente
+# Para rodar o servidor:
+```shell
+node server.js
+```
+# Ou utilize a opção de recarregamento automático:
+```shell
+node --watch server.js
+```
+# =============================
+# Configuração do MongoDB
+# =============================
 
-Instalar o pacoto do mongodb e usar mongo db atlas:
-        npm install mongodb
+# 1. Instalar o pacote do MongoDB
+```shell
+npm install mongodb
+```
+# 2. Criar o arquivo `.env` e configurar a string de conexão
+``` 
+STRING_CONEXAO=<sua_string_de_conexao>
+```
 
-Criar arquivo .env de variaveis de ambiente e configurar a configuração de conexao do mongo db
+# 3. Alterar o `package.json` para suportar o `.env`
+```shell
+# Adicionar no "scripts" do package.json:
+"dev": "node --watch --env-file=.env server.js",
+```
 
-alterar o package json para receber o .env 
-        "dev": "node --watch --env-file=.env server.js",
-Agora pode utiliza o comando npm run dev
+# Para rodar o servidor com o ambiente configurado:
+```
+npm run dev
+```
+# 4. Exemplo de uso de variáveis de ambiente
+```
+console.log(process.env.STRING_CONEXAO);
+```
 
-exemplo de Comando para utilizar variaveis de ambiete
-        console.log(process.env.STRING_CONEXAO)
+# 5. Criar script de conexão com o MongoDB
+ - Criar `src/config/dbConfig.js` com a lógica de conexão
+ - Importar e utilizar no `server.js`
+```shell
+# Código de exemplo para buscar posts:
+const conexao = await conectarAoBanco(process.env.STRING_CONEXAO);
 
-Criar um script de conexão com MongoDB, criar uma pasta src/config e um arquivo dbConfig.js e colocar um script para conexão com mongodb
-
-É preciso importar no server.js esse script de conexão ao mongo db para realizar a conexão
-
-```javascript
-const conexao = await conectarAoBanco(process.env.STRING_CONEXAO)
-
-async function getTodosPosts(){
-    const db =  conexao.db("teste-node-backend") //nome banco
-    const colecao = db.collection("posts") // nome tabela
-    return colecao.find().toArray()
+async function getTodosPosts() {
+    const db = conexao.db("teste-node-backend"); // Nome do banco
+    const colecao = db.collection("posts"); // Nome da tabela
+    return colecao.find().toArray();
 }
 ```
 
-E chamar a funcao em algumam metodo get/ post etc
-
+# 6. Exemplo de uso em uma rota:
 ```javascript
 app.get("/posts", async (req, res) => {
-    const posts = await getTodosPosts()
-    res.status(200).json(posts)
-})
+    const posts = await getTodosPosts();
+    res.status(200).json(posts);
+});
 ```
 
-Agora é necessário criar uma modularização:
-Criar pastas para determinadas necesspidades do codigo:
-pasta 1 dentro de src: routes, nessa pasta é criado o arquivo postRoutes.js para colocar apenas as rotas do projeto
-pasta 2 dentro de src: controller, nessa pasta é criado a parte de lógica do projeto, para colcoar apenas a responsabildiade de lidar com reuqisicoes e repsostas
-pasta 3 dentro de src: models, colocar todas as funções auxiliares como conectar o banco, fazer requisicoes ao banco eetc
+## =============================
+## Modularização do Projeto
+## =============================
 
-Modelo routes, controlle models, perguntar a IA
+## Criar as seguintes pastas dentro de `src`:
+- `routes`: Rotas do projeto (ex.: `postRoutes.js`)
+- `controller`: Lógica do projeto (requisições e respostas)
+- `models`: Funções auxiliares (ex.: conexão com banco)
 
-Utilizar a extensão do vsCode que funciona como um postMan = ThunderClient
+## =============================
+## Upload de Arquivos com Multer
+## =============================
 
-Utilizar Multer ajuda a gerenciar arquivos + gerenciamento de pastas de um computador, ao enviar uma imagem pro back-end é precisdo armazenar essa imagem
-                npm install multer
-
-para utilizar o multer utilize 
-                const upload = multer({dest: "./uploads"})
-
-e para fazer upload do arquivo durante a requisição é necessário colocar antes de chamar a função do controller:
-
+# 1. Instalar o Multer
+```shell
+npm install multer
+```
+# 2. Exemplo de uso básico do Multer:
 ```javascript
-    app.post("/upload", upload.single("imagem"),  )
+const upload = multer({ dest: "./uploads" });
+
+app.post("/upload", upload.single("imagem"), (req, res) => {
+    res.send("Arquivo enviado!");
+});
 ```
 
-no windowns é necessário fazer de outra forma q ta a aula.
+# 3. Configuração avançada para Windows (preserva o nome do arquivo):
 ```javascript
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, "uploads/");
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
-    }
-})
+    },
+});
 
-const upload = multer({ dest: "./uploads" , storage})
-```
-Caso esteja no windowns ele vai salvar com nomes aleatorios, e esse codigo ajuda a salvar o nome correto
-
-Para testar o multer no postman, é necessário enviar a imagem na parte do body "form-data", isso está na documentação do multer.
-
-Para servir arquivos estáticos (abrir nossa pasta de arquivos estaticos para qualquer um com acesso a esse servidor) é necessário adicionar isso no codigo do nosso arquivo server.js:
-```
-app.use(express.static("uploads"))
+const upload = multer({ storage });
 ```
 
-Para atualizar um argumento no mongodb é preciso guarda ro id do objeto nesse tipo de variavel:
-    const objId = ObjectId.createFromHexString(id)
+# 4. Tornar arquivos estáticos acessíveis:
+```shell
+app.use(express.static("uploads"));
+```
 
+## =============================
+## Deploy na Google Cloud
+## =============================
 
-Agora para adicionar o servico da api gemini, é necessário criar uma nova pasta chamada serviços, e utiliza a chave da api que foi erada pelo gemini.
-é necessário instalar as dependencias do gemini
-                npm i @google/generative-ai
-
-Para utilizar nosso back-end em um endereco q naos eja ele mesmo, os navegadores tem uma protecao, então é necessário utilizar o "CORS" para permitir requisicoes de outra url
-
-## Objetivo atual:
-### Postar nossa api na cloud
-Primeiro passo é checar se a versão do node q utilizamos é compativel com a da cloud
-Para garantir que oo node vai fucnionar tanto local quanto na cloud é preciso isntalar uma lib chamada dotenv
-
-Após isso é necessário criar um projeto no google cloud, clonar esse repositorio no github, rodar o script services.sh, adicionar o .env ao projeto e por fim instalar as dependencias com:
-                        npm install
-
-Agora podemos rodar nossa api no google clous utilizando o comando de deploy:
-                gcloud run deploy --source . --port 3000
-
-Siga o passo a passo e o deploy esta completo, receba o endpoint da sua api e utilize como quiser! :]
+# 1. Garantir compatibilidade com a versão do Node.js utilizada na Cloud
+```shell
+npm install dotenv
+```
+# 2. Criar projeto no Google Cloud e configurar:
+- Clonar este repositório do GitHub
+- Rodar o script `services.sh`
+- Adicionar o arquivo `.env` ao projeto
+- Instalar dependências:
+```shell
+npm install
+```
+# 3. Deploy do backend:
+```
+gcloud run deploy --source . --port 3000
+```
+## Após o deploy, utilize o endpoint fornecido pela Google Cloud.
