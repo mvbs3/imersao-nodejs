@@ -116,3 +116,11 @@ Para utilizar nosso back-end em um endereco q naos eja ele mesmo, os navegadores
 ### Postar nossa api na cloud
 Primeiro passo é checar se a versão do node q utilizamos é compativel com a da cloud
 Para garantir que oo node vai fucnionar tanto local quanto na cloud é preciso isntalar uma lib chamada dotenv
+
+Após isso é necessário criar um projeto no google cloud, clonar esse repositorio no github, rodar o script services.sh, adicionar o .env ao projeto e por fim instalar as dependencias com:
+                        npm install
+
+Agora podemos rodar nossa api no google clous utilizando o comando de deploy:
+                gcloud run deploy --source . --port 3000
+
+Siga o passo a passo e o deploy esta completo, receba o endpoint da sua api e utilize como quiser! :]
