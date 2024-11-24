@@ -111,3 +111,8 @@ Agora para adicionar o servico da api gemini, é necessário criar uma nova past
                 npm i @google/generative-ai
 
 Para utilizar nosso back-end em um endereco q naos eja ele mesmo, os navegadores tem uma protecao, então é necessário utilizar o "CORS" para permitir requisicoes de outra url
+
+## Objetivo atual:
+### Postar nossa api na cloud
+Primeiro passo é checar se a versão do node q utilizamos é compativel com a da cloud
+Para garantir que oo node vai fucnionar tanto local quanto na cloud é preciso isntalar uma lib chamada dotenv
