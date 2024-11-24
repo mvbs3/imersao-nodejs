@@ -109,3 +109,5 @@ Para atualizar um argumento no mongodb é preciso guarda ro id do objeto nesse t
 Agora para adicionar o servico da api gemini, é necessário criar uma nova pasta chamada serviços, e utiliza a chave da api que foi erada pelo gemini.
 é necessário instalar as dependencias do gemini
                 npm i @google/generative-ai
+
+Para utilizar nosso back-end em um endereco q naos eja ele mesmo, os navegadores tem uma protecao, então é necessário utilizar o "CORS" para permitir requisicoes de outra url
