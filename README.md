@@ -96,3 +96,14 @@ const upload = multer({ dest: "./uploads" , storage})
 Caso esteja no windowns ele vai salvar com nomes aleatorios, e esse codigo ajuda a salvar o nome correto
 
 Para testar o multer no postman, é necessário enviar a imagem na parte do body "form-data", isso está na documentação do multer.
+
+Para servir arquivos estáticos (abrir nossa pasta de arquivos estaticos para qualquer um com acesso a esse servidor) é necessário adicionar isso no codigo do nosso arquivo server.js:
+```
+app.use(express.static("uploads"))
+```
+
+Para atualizar um argumento no mongodb é preciso guarda ro id do objeto nesse tipo de variavel:
+    const objId = ObjectId.createFromHexString(id)
+
+
+Agora para adicionar o servico da api gemini, é necessário criar uma nova pasta chamada serviços, e utiliza a chave da api que foi erada pelo gemini.
